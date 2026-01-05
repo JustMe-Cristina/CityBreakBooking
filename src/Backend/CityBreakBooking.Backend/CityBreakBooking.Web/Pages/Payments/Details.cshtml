@@ -1,0 +1,29 @@
+@page "{id:int}"
+@model CityBreakBooking.Web.Pages.Payments.DetailsModel
+
+<h1>Payment Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Reservation</dt>
+    <dd class="col-sm-10">#@Model.Payment.ReservationId</dd>
+
+    <dt class="col-sm-2">Trip</dt>
+    <dd class="col-sm-10">@Model.Payment.Reservation?.Trip?.Title</dd>
+
+    <dt class="col-sm-2">Destination</dt>
+    <dd class="col-sm-10">@Model.Payment.Reservation?.Trip?.Destination?.Name</dd>
+
+    <dt class="col-sm-2">Amount</dt>
+    <dd class="col-sm-10">@Model.Payment.Amount</dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Payment.Status</dd>
+
+    <dt class="col-sm-2">Payment Date</dt>
+    <dd class="col-sm-10">@Model.Payment.PaymentDate.ToString("yyyy-MM-dd HH:mm")</dd>
+</dl>
+
+<p>
+    <a asp-page="Edit" asp-route-id="@Model.Payment.Id">Edit</a> |
+    <a asp-page="Index">Back to list</a>
+</p>

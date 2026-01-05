@@ -1,0 +1,25 @@
+@page "{id:int}"
+@model CityBreakBooking.Web.Pages.Payments.DeleteModel
+
+<h1>Delete Payment</h1>
+
+<h3>Are you sure you want to delete this payment?</h3>
+
+<dl class="row">
+    <dt class="col-sm-2">Reservation</dt>
+    <dd class="col-sm-10">#@Model.Payment.ReservationId</dd>
+
+    <dt class="col-sm-2">Amount</dt>
+    <dd class="col-sm-10">@Model.Payment.Amount</dd>
+
+    <dt class="col-sm-2">Status</dt>
+    <dd class="col-sm-10">@Model.Payment.Status</dd>
+
+    <dt class="col-sm-2">Payment Date</dt>
+    <dd class="col-sm-10">@Model.Payment.PaymentDate.ToString("yyyy-MM-dd HH:mm")</dd>
+</dl>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>

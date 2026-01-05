@@ -1,7 +1,7 @@
-namespace CityBreakBooking.Web.Models;
+namespace CityBreakBooking.Web.Models.Enums;
 
 public enum PaymentStatus
 {
-    Paid,
-    Rejected
+    Paid = 0,
+    Rejected = 1
 }
