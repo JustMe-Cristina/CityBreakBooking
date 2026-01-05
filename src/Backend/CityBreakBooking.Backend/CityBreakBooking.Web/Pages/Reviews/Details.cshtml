@@ -1,0 +1,29 @@
+@page "{id:int}"
+@model CityBreakBooking.Web.Pages.Reviews.DetailsModel
+
+<h1>Review Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Trip</dt>
+    <dd class="col-sm-10">@Model.Review.Trip?.Title</dd>
+
+    <dt class="col-sm-2">Destination</dt>
+    <dd class="col-sm-10">@Model.Review.Trip?.Destination?.Name (@Model.Review.Trip?.Destination?.Country)</dd>
+
+    <dt class="col-sm-2">Rating</dt>
+    <dd class="col-sm-10">@Model.Review.Rating</dd>
+
+    <dt class="col-sm-2">Comment</dt>
+    <dd class="col-sm-10">@Model.Review.Comment</dd>
+
+    <dt class="col-sm-2">UserId</dt>
+    <dd class="col-sm-10">@Model.Review.UserId</dd>
+
+    <dt class="col-sm-2">Created</dt>
+    <dd class="col-sm-10">@Model.Review.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+</dl>
+
+<p>
+    <a asp-page="Edit" asp-route-id="@Model.Review.Id">Edit</a> |
+    <a asp-page="Index">Back to list</a>
+</p>

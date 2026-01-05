@@ -1,0 +1,40 @@
+@page "{id:int}"
+@model CityBreakBooking.Web.Pages.Reviews.EditModel
+
+<h1>Edit Review</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="Review.Id" />
+    <input type="hidden" asp-for="Review.CreatedAt" />
+
+    <div class="mb-3">
+        <label asp-for="Review.TripId" class="form-label">Trip</label>
+        <select asp-for="Review.TripId" class="form-select" asp-items="Model.TripOptions"></select>
+        <span asp-validation-for="Review.TripId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Review.Rating" class="form-label"></label>
+        <input asp-for="Review.Rating" class="form-control" />
+        <span asp-validation-for="Review.Rating" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Review.Comment" class="form-label"></label>
+        <textarea asp-for="Review.Comment" class="form-control"></textarea>
+        <span asp-validation-for="Review.Comment" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Review.UserId" class="form-label">UserId (demo)</label>
+        <input asp-for="Review.UserId" class="form-control" />
+        <span asp-validation-for="Review.UserId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
