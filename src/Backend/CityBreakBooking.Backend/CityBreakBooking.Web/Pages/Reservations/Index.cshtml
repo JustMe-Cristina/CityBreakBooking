@@ -1,0 +1,40 @@
+@page
+@model CityBreakBooking.Web.Pages.Reservations.IndexModel
+
+<h1>Reservations</h1>
+
+<p>
+    <a asp-page="Create">Create new</a>
+</p>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Trip</th>
+        <th>Destination</th>
+        <th>Reservation Date</th>
+        <th>Persons</th>
+        <th>Status</th>
+        <th>UserId</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var r in Model.Reservations)
+    {
+        <tr>
+            <td>@r.Trip?.Title</td>
+            <td>@r.Trip?.Destination?.Name (@r.Trip?.Destination?.Country)</td>
+            <td>@r.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@r.NumberOfPersons</td>
+            <td>@r.Status</td>
+            <td>@r.UserId</td>
+            <td>
+                <a asp-page="Details" asp-route-id="@r.Id">Details</a> |
+                <a asp-page="Edit" asp-route-id="@r.Id">Edit</a> |
+                <a asp-page="Delete" asp-route-id="@r.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

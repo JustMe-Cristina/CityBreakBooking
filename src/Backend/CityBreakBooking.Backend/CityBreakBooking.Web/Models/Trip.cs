@@ -26,4 +26,8 @@ public class Trip
     public int MaxSeats { get; set; }
 
     public bool IsActive { get; set; } = true;
+    
+    //colecția de rezervări în Trip (navigation property) și te asiguri că Reservation are TripId + Trip.
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+
 }
