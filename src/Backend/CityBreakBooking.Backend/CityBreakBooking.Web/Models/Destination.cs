@@ -1,19 +1,23 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CityBreakBooking.Web.Models;
-
-public class Destination
+namespace CityBreakBooking.Web.Models
 {
-    public int Id { get; set; }
+    public class Destination
+    {
+        public int Id { get; set; }
 
-    [Required, MaxLength(100)]
-    public string Name { get; set; } = string.Empty;
+        [Required]
+        [Display(Name = "City")]
+        public string Name { get; set; } = string.Empty;
 
-    [Required, MaxLength(100)]
-    public string Country { get; set; } = string.Empty;
+        [Required]
+        public string Country { get; set; } = string.Empty;
 
-    [MaxLength(500)]
-    public string? Description { get; set; }
+        [Display(Name = "Description")]
+        public string? Description { get; set; }
 
-    public bool IsActive { get; set; } = true;
+        // Navigation
+        public ICollection<Trip>? Trips { get; set; }
+        public bool IsActive { get; set; }
+    }
 }

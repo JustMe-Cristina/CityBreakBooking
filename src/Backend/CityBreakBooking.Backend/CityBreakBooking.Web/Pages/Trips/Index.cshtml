@@ -1,5 +1,6 @@
 @page
 @model CityBreakBooking.Web.Pages.Trips.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Trips</h1>
 

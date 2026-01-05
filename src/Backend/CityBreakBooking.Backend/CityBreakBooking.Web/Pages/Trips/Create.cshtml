@@ -1,5 +1,6 @@
 @page
 @model CityBreakBooking.Web.Pages.Trips.CreateModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Create Trip</h1>
 

@@ -1,5 +1,6 @@
 @page "{id:int}"
 @model CityBreakBooking.Web.Pages.Destinations.DetailsModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Destination Details</h1>
 

@@ -1,5 +1,6 @@
 @page "{id:int}"
 @model CityBreakBooking.Web.Pages.Payments.DeleteModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Delete Payment</h1>
 

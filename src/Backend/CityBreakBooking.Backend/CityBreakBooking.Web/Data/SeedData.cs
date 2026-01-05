@@ -9,7 +9,7 @@ public static class SeedData
         if (db.Destinations.Any()) return;
 
         var paris = new Destination { Name = "Paris", Country = "France", Description = "Classic city-break", IsActive = true };
-        var rome  = new Destination { Name = "Rome", Country = "Italy", Description = "History & food", IsActive = true };
+        var rome  = new Destination { Name  = "Rome", Country = "Italy", Description = "History & food", IsActive = true };
         var barca = new Destination { Name = "Barcelona", Country = "Spain", Description = "Sea & culture", IsActive = true };
 
         db.Destinations.AddRange(paris, rome, barca);

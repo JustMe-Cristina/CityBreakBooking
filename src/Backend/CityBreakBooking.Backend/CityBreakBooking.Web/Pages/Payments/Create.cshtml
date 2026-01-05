@@ -1,5 +1,6 @@
 @page
 @model CityBreakBooking.Web.Pages.Payments.CreateModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Create Payment</h1>
 

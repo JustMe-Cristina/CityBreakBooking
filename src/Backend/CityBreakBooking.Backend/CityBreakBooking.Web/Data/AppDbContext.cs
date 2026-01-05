@@ -4,15 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityBreakBooking.Web.Data;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext(DbContextOptions<AppDbContext> options)
+    : IdentityDbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-    public DbSet<Destination> Destinations { get; set; } = null!;
-    public DbSet<Trip> Trips { get; set; } = null!;
-    public DbSet<Reservation> Reservations { get; set; } = null!;
-    public DbSet<Review> Reviews { get; set; } = null!;
-    public DbSet<Payment> Payments { get; set; } = null!;
+    public DbSet<Destination> Destinations { get; set; } = default!;
+    public DbSet<Trip> Trips { get; set; } = default!;
+    public DbSet<Reservation> Reservations { get; set; } = default!;
+    public DbSet<Review> Reviews { get; set; } = default!;
+    public DbSet<Payment> Payments { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

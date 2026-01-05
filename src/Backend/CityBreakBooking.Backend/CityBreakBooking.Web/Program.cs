@@ -1,20 +1,19 @@
 using CityBreakBooking.Web.Data;
-using CityBreakBooking.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Db
+// Db (SQLite)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity + Roles
+// Identity (cu roles)
 builder.Services
-    .AddDefaultIdentity<ApplicationUser>(options =>
+    .AddDefaultIdentity<IdentityUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
-        options.Password.RequireNonAlphanumeric = false;
+        // optional: basic password rules
         options.Password.RequiredLength = 6;
     })
     .AddRoles<IdentityRole>()
@@ -24,17 +23,15 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// migrate + seed roles/users
+// migrate DB on startup (crează și tabelele Identity + ale tale)
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-
-    var db = services.GetRequiredService<AppDbContext>();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
-
-    await IdentitySeed.SeedAsync(services);
-    SeedData.EnsureSeeded(db);
 }
+
+// seed roles + admin
+await IdentitySeed.SeedAsync(app.Services);
 
 if (!app.Environment.IsDevelopment())
 {

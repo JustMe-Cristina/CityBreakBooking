@@ -1,5 +1,6 @@
 @page
 @model CityBreakBooking.Web.Pages.Reservations.Manage.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Pending Reservations</h1>
 
