@@ -1,0 +1,32 @@
+@page "{id:int}"
+@model CityBreakBooking.Web.Pages.Trips.DetailsModel
+
+<h1>Trip Details</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Title</dt>
+    <dd class="col-sm-10">@Model.Trip.Title</dd>
+
+    <dt class="col-sm-2">Destination</dt>
+    <dd class="col-sm-10">@Model.Trip.Destination?.Name (@Model.Trip.Destination?.Country)</dd>
+
+    <dt class="col-sm-2">Start</dt>
+    <dd class="col-sm-10">@Model.Trip.StartDate.ToString("yyyy-MM-dd")</dd>
+
+    <dt class="col-sm-2">End</dt>
+    <dd class="col-sm-10">@Model.Trip.EndDate.ToString("yyyy-MM-dd")</dd>
+
+    <dt class="col-sm-2">Price</dt>
+    <dd class="col-sm-10">@Model.Trip.PricePerPerson</dd>
+
+    <dt class="col-sm-2">Seats</dt>
+    <dd class="col-sm-10">@Model.Trip.MaxSeats</dd>
+
+    <dt class="col-sm-2">Active</dt>
+    <dd class="col-sm-10">@Model.Trip.IsActive</dd>
+</dl>
+
+<p>
+    <a asp-page="Edit" asp-route-id="@Model.Trip.Id">Edit</a> |
+    <a asp-page="Index">Back to list</a>
+</p>a
