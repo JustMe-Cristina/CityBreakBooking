@@ -1,19 +1,6 @@
-# Build results
 bin/
 obj/
-
-# IDEs
-.idea/
-.vs/
-.vscode/
-
-# OS
-.DS_Store
-
-# SQLite
 *.db
-*.db-shm
-*.db-wal
-
-# Rider
-*.sln.iml
+.env
+.vscode/
+.idea/

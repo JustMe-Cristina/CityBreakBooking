@@ -29,7 +29,6 @@ public class IndexModel : PageModel
         var reservation = await _db.Reservations.FirstOrDefaultAsync(r => r.Id == id);
         if (reservation is null) return NotFound();
 
-        // capacity check at confirmation time (important!)
         var trip = await _db.Trips.FirstOrDefaultAsync(t => t.Id == reservation.TripId);
         if (trip is null) return NotFound();
 
@@ -41,7 +40,6 @@ public class IndexModel : PageModel
 
         if (reservation.NumberOfPersons > available)
         {
-            // keep pending but show error
             TempData["Error"] = "Cannot confirm. Not enough available seats. Remaining: " + available + ".";
             return RedirectToPage();
         }

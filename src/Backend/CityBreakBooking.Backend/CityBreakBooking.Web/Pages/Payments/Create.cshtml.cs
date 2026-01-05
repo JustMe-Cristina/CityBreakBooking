@@ -21,13 +21,12 @@ public class CreateModel : PageModel
 
     public async Task OnGetAsync()
     {
-        // Only reservations WITHOUT an existing payment (profi)
-        var paidReservationIds = await _db.Payments.Select(p => p.ReservationId).ToListAsync();
+        var alreadyPaid = await _db.Payments.Select(p => p.ReservationId).ToListAsync();
 
         ReservationOptions = await _db.Reservations
             .Include(r => r.Trip)
             .ThenInclude(t => t!.Destination)
-            .Where(r => !paidReservationIds.Contains(r.Id))
+            .Where(r => !alreadyPaid.Contains(r.Id))
             .OrderByDescending(r => r.ReservationDate)
             .Select(r => new SelectListItem(
                 "#" + r.Id + " - " + r.Trip!.Title + " (" + r.Trip!.Destination!.Name + ")",
@@ -45,14 +44,12 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        // validate reservation exists
-        var reservation = await _db.Reservations.FirstOrDefaultAsync(r => r.Id == Payment.ReservationId);
-        if (reservation is null)
+        var reservationExists = await _db.Reservations.AnyAsync(r => r.Id == Payment.ReservationId);
+        if (!reservationExists)
             ModelState.AddModelError("Payment.ReservationId", "Selected reservation does not exist.");
 
-        // validate unique payment per reservation
-        var alreadyExists = await _db.Payments.AnyAsync(p => p.ReservationId == Payment.ReservationId);
-        if (alreadyExists)
+        var duplicate = await _db.Payments.AnyAsync(p => p.ReservationId == Payment.ReservationId);
+        if (duplicate)
             ModelState.AddModelError("Payment.ReservationId", "This reservation already has a payment.");
 
         if (!ModelState.IsValid)
@@ -65,7 +62,6 @@ public class CreateModel : PageModel
 
         _db.Payments.Add(Payment);
         await _db.SaveChangesAsync();
-
         return RedirectToPage("Index");
     }
 }
