@@ -1,8 +1,8 @@
-namespace CityBreakBooking.Web.Models;
+namespace CityBreakBooking.Web.Models.Enums;
 
 public enum ReservationStatus
 {
-    Pending,
-    Confirmed,
-    Cancelled
+    Pending = 0,
+    Confirmed = 1,
+    Cancelled = 2
 }

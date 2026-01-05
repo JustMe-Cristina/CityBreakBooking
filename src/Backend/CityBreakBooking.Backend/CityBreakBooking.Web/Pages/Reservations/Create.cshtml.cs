@@ -1,5 +1,6 @@
 using CityBreakBooking.Web.Data;
 using CityBreakBooking.Web.Models;
+using CityBreakBooking.Web.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,7 +11,11 @@ namespace CityBreakBooking.Web.Pages.Reservations;
 public class CreateModel : PageModel
 {
     private readonly AppDbContext _db;
-    public CreateModel(AppDbContext db) => _db = db;
+
+    public CreateModel(AppDbContext db)
+    {
+        _db = db;
+    }
 
     [BindProperty]
     public Reservation Reservation { get; set; } = new();
@@ -25,11 +30,12 @@ public class CreateModel : PageModel
             .Where(t => t.IsActive)
             .OrderBy(t => t.StartDate)
             .Select(t => new SelectListItem(
-                $"{t.Title} - {t.Destination!.Name} ({t.StartDate:yyyy-MM-dd} → {t.EndDate:yyyy-MM-dd})",
+                t.Title + " - " + t.Destination!.Name + " (" + t.StartDate.ToString("yyyy-MM-dd") + " → " + t.EndDate.ToString("yyyy-MM-dd") + ")",
                 t.Id.ToString()))
             .ToListAsync();
 
-        StatusOptions = Enum.GetValues<ReservationStatus>()
+        StatusOptions = Enum.GetValues(typeof(ReservationStatus))
+            .Cast<ReservationStatus>()
             .Select(s => new SelectListItem(s.ToString(), ((int)s).ToString()))
             .ToList();
 
@@ -38,33 +44,32 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        // Demo until auth: set a placeholder user id
         if (string.IsNullOrWhiteSpace(Reservation.UserId))
             Reservation.UserId = "demo-user";
 
-        // Custom validation: seats available
-        var trip = await _db.Trips
-            .Include(t => t.Reservations)
-            .FirstOrDefaultAsync(t => t.Id == Reservation.TripId);
-
+        // Trip exists?
+        var trip = await _db.Trips.FirstOrDefaultAsync(t => t.Id == Reservation.TripId);
         if (trip is null)
         {
             ModelState.AddModelError("Reservation.TripId", "Selected trip does not exist.");
         }
         else
         {
-            var alreadyReserved = trip.Reservations
-                .Where(r => r.Status != ReservationStatus.Cancelled)
-                .Sum(r => r.NumberOfPersons);
+            // Capacity validation (only Confirmed count as occupied)
+            var confirmedSeats = await _db.Reservations
+                .Where(r => r.TripId == Reservation.TripId && r.Status == ReservationStatus.Confirmed)
+                .SumAsync(r => (int?)r.NumberOfPersons) ?? 0;
 
-            var remaining = trip.MaxSeats - alreadyReserved;
-            if (Reservation.NumberOfPersons > remaining)
-                ModelState.AddModelError("Reservation.NumberOfPersons", $"Not enough seats. Remaining: {remaining}.");
+            var available = trip.MaxSeats - confirmedSeats;
+
+            if (Reservation.NumberOfPersons > available)
+                ModelState.AddModelError("Reservation.NumberOfPersons",
+                    "Not enough available seats. Remaining: " + available + ".");
         }
 
         if (!ModelState.IsValid)
         {
-            await OnGetAsync();
+            await OnGetAsync(); // rebuild dropdowns
             return Page();
         }
 
