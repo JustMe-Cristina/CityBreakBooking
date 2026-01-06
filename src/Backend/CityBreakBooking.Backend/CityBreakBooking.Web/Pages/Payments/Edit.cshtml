@@ -1,39 +1,41 @@
 @page "{id:int}"
 @model CityBreakBooking.Web.Pages.Payments.EditModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Edit Payment</h1>
 
-<form method="post">
-    <input type="hidden" asp-for="Payment.Id" />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="Payment.ReservationId" class="form-label">Reservation</label>
-        <select asp-for="Payment.ReservationId" class="form-select" asp-items="Model.ReservationOptions"></select>
-        <span asp-validation-for="Payment.ReservationId" class="text-danger"></span>
+            <input type="hidden" asp-for="Payment.Id" />
+            <div class="mb-3">
+                <label class="form-label">Reservation</label>
+                <input class="form-control" value="@Model.Payment.ReservationId" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <input class="form-control" asp-for="Payment.Amount" />
+                <span asp-validation-for="Payment.Amount" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Payment Date</label>
+                <input class="form-control" asp-for="Payment.PaymentDate" type="datetime-local"
+                       value="@Model.Payment.PaymentDate.ToLocalTime().ToString("yyyy-MM-ddTHH:mm")" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select class="form-select" asp-for="Payment.Status" asp-items="Model.StatusOptions"></select>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-secondary" asp-page="./Index">Back</a>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Payment.Amount" class="form-label"></label>
-        <input asp-for="Payment.Amount" class="form-control" />
-        <span asp-validation-for="Payment.Amount" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Payment.Status" class="form-label"></label>
-        <select asp-for="Payment.Status" class="form-select" asp-items="Model.StatusOptions"></select>
-        <span asp-validation-for="Payment.Status" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Payment.PaymentDate" class="form-label"></label>
-        <input asp-for="Payment.PaymentDate" class="form-control" />
-        <span asp-validation-for="Payment.PaymentDate" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

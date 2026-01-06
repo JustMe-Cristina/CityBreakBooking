@@ -12,35 +12,27 @@ public class DeleteModel : PageModel
     public DeleteModel(AppDbContext db) => _db = db;
 
     [BindProperty]
-    public Payment Payment { get; set; } = new();
+    public Payment Payment { get; set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync(int id)
     {
-        if (id is null) return NotFound();
-
-        var payment = await _db.Payments
+        Payment = await _db.Payments
             .Include(p => p.Reservation)
-            .ThenInclude(r => r!.Trip)
-            .ThenInclude(t => t!.Destination)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id.Value);
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-        if (payment is null) return NotFound();
-
-        Payment = payment;
+        if (Payment is null) return NotFound();
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync(int? id)
+    public async Task<IActionResult> OnPostAsync(int id)
     {
-        if (id is null) return NotFound();
-
-        var payment = await _db.Payments.FindAsync(id.Value);
+        var payment = await _db.Payments.FirstOrDefaultAsync(p => p.Id == id);
         if (payment is null) return NotFound();
 
         _db.Payments.Remove(payment);
         await _db.SaveChangesAsync();
 
-        return RedirectToPage("Index");
+        TempData["Success"] = "Payment deleted.";
+        return RedirectToPage("./Index");
     }
 }

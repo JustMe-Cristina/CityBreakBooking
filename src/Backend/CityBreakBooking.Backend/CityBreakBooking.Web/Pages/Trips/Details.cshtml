@@ -24,7 +24,7 @@
     <dd class="col-sm-10">@Model.Trip.MaxSeats</dd>
 
     <dt class="col-sm-2">Active</dt>
-    <dd class="col-sm-10">@Model.Trip.IsActive</dd>
+    <dd class="col-sm-10">@(Model.Trip.IsActive ? "ACTIVE" : "INACTIVE")</dd>
 </dl>
 
 <p>

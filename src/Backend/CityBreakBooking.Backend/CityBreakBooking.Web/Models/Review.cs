@@ -6,8 +6,7 @@ public class Review
 {
     public int Id { get; set; }
 
-    [Required]
-    public int TripId { get; set; }
+    [Required] public int TripId { get; set; }
     public Trip? Trip { get; set; }
 
     [Required]

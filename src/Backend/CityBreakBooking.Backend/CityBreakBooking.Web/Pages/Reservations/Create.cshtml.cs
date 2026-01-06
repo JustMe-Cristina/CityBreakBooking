@@ -44,8 +44,8 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (string.IsNullOrWhiteSpace(Reservation.UserId))
-            Reservation.UserId = "demo-user";
+        if (string.IsNullOrWhiteSpace(Reservation.UserEmail))
+            Reservation.UserEmail = "demo-user";
 
         // Trip exists?
         var trip = await _db.Trips.FirstOrDefaultAsync(t => t.Id == Reservation.TripId);

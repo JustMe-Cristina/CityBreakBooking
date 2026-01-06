@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CityBreakBooking.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260105190925_AddIdentity")]
-    partial class AddIdentity
+    [Migration("20260106120228_AddUserEmailToReservations")]
+    partial class AddUserEmailToReservations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,11 +28,9 @@ namespace CityBreakBooking.Web.Migrations
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
@@ -40,7 +38,6 @@ namespace CityBreakBooking.Web.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -92,7 +89,7 @@ namespace CityBreakBooking.Web.Migrations
                     b.Property<int>("TripId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserEmail")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -397,7 +394,7 @@ namespace CityBreakBooking.Web.Migrations
             modelBuilder.Entity("CityBreakBooking.Web.Models.Trip", b =>
                 {
                     b.HasOne("CityBreakBooking.Web.Models.Destination", "Destination")
-                        .WithMany()
+                        .WithMany("Trips")
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -454,6 +451,11 @@ namespace CityBreakBooking.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CityBreakBooking.Web.Models.Destination", b =>
+                {
+                    b.Navigation("Trips");
                 });
 
             modelBuilder.Entity("CityBreakBooking.Web.Models.Trip", b =>

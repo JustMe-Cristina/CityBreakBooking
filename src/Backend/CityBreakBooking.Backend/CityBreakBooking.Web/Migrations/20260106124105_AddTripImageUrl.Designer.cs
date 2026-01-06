@@ -3,6 +3,7 @@ using System;
 using CityBreakBooking.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CityBreakBooking.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260106124105_AddTripImageUrl")]
+    partial class AddTripImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -366,8 +369,8 @@ namespace CityBreakBooking.Web.Migrations
             modelBuilder.Entity("CityBreakBooking.Web.Models.Payment", b =>
                 {
                     b.HasOne("CityBreakBooking.Web.Models.Reservation", "Reservation")
-                        .WithOne("Payment")
-                        .HasForeignKey("CityBreakBooking.Web.Models.Payment", "ReservationId")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -461,11 +464,6 @@ namespace CityBreakBooking.Web.Migrations
             modelBuilder.Entity("CityBreakBooking.Web.Models.Destination", b =>
                 {
                     b.Navigation("Trips");
-                });
-
-            modelBuilder.Entity("CityBreakBooking.Web.Models.Reservation", b =>
-                {
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("CityBreakBooking.Web.Models.Trip", b =>

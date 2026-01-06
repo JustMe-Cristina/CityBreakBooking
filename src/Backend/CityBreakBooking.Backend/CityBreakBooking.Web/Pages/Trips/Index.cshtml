@@ -1,11 +1,38 @@
 @page
 @model CityBreakBooking.Web.Pages.Trips.IndexModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Trips</h1>
 
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-4">
+        <label class="form-label">Destination</label>
+        <select class="form-select" asp-for="DestinationId" asp-items="Model.DestinationOptions">
+            <option value="">All</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Status</label>
+        <select class="form-select" asp-for="IsActive" asp-items="Model.ActiveOptions"></select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Search</label>
+        <input class="form-control" asp-for="Search" placeholder="Title..." />
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+
+    <div class="col-12">
+        <a class="btn btn-outline-secondary btn-sm"
+           asp-page="./Index">Clear</a>
+    </div>
+</form>
+
 <p>
-    <a asp-page="Create">Create new</a>
+    <a class="btn btn-success" asp-page="Create">Create New</a>
 </p>
 
 <table class="table">
@@ -16,8 +43,8 @@
         <th>Start</th>
         <th>End</th>
         <th>Price</th>
-        <th>Seats</th>
-        <th>Active</th>
+        <th>Max Seats</th>
+        <th>Status</th>
         <th></th>
     </tr>
     </thead>
@@ -26,16 +53,16 @@
     {
         <tr>
             <td>@t.Title</td>
-            <td>@t.Destination?.Name (@t.Destination?.Country)</td>
+            <td>@t.Destination?.Name</td>
             <td>@t.StartDate.ToString("yyyy-MM-dd")</td>
             <td>@t.EndDate.ToString("yyyy-MM-dd")</td>
             <td>@t.PricePerPerson</td>
             <td>@t.MaxSeats</td>
-            <td>@t.IsActive</td>
+            <td>@(t.IsActive ? "ACTIVE" : "INACTIVE")</td>
             <td>
-                <a asp-page="Details" asp-route-id="@t.Id">Details</a> |
-                <a asp-page="Edit" asp-route-id="@t.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@t.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@t.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@t.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@t.Id">Delete</a>
             </td>
         </tr>
     }

@@ -3,8 +3,35 @@
 
 <h1>Reservations</h1>
 
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-4">
+        <label class="form-label">Trip</label>
+        <select class="form-select" asp-for="TripId" asp-items="Model.TripOptions">
+            <option value="">All</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Status</label>
+        <select class="form-select" asp-for="Status" asp-items="Model.StatusOptions"></select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">UserId</label>
+        <input class="form-control" asp-for="UserSearch" placeholder="contains..." />
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+
+    <div class="col-12">
+        <a class="btn btn-outline-secondary btn-sm" asp-page="./Index">Clear</a>
+    </div>
+</form>
+
 <p>
-    <a asp-page="Create">Create new</a>
+    <a class="btn btn-success" asp-page="Create">Create New</a>
 </p>
 
 <table class="table">
@@ -12,10 +39,10 @@
     <tr>
         <th>Trip</th>
         <th>Destination</th>
-        <th>Date</th>
-        <th>Persons</th>
-        <th>Status</th>
         <th>UserId</th>
+        <th>Persons</th>
+        <th>Date</th>
+        <th>Status</th>
         <th></th>
     </tr>
     </thead>
@@ -24,15 +51,16 @@
     {
         <tr>
             <td>@r.Trip?.Title</td>
-            <td>@r.Trip?.Destination?.Name (@r.Trip?.Destination?.Country)</td>
-            <td>@r.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
-            <td>@r.NumberOfPersons</td>
-            <td>@r.Status</td>
+            <td>@r.Trip?.Destination?.Name</td>
             <td>@r.UserId</td>
+            <td>@r.UserEmail</td>
+            <td>@r.NumberOfPersons</td>
+            <td>@r.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>@r.Status</td>
             <td>
-                <a asp-page="Details" asp-route-id="@r.Id">Details</a> |
-                <a asp-page="Edit" asp-route-id="@r.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@r.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@r.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@r.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@r.Id">Delete</a>
             </td>
         </tr>
     }

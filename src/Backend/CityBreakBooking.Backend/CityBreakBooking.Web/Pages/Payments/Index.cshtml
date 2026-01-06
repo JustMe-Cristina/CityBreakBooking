@@ -1,19 +1,32 @@
 @page
+@using CityBreakBooking.Web.Models.Enums
 @model CityBreakBooking.Web.Pages.Payments.IndexModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Payments</h1>
 
-<p><a asp-page="Create">Create new</a></p>
+<form method="get" class="mb-3">
+    <div class="d-flex gap-2 align-items-center">
+        <select name="status" class="form-select w-auto">
+            <option value="">All statuses</option>
+            @foreach (var s in Enum.GetValues<PaymentStatus>())
+            {
+                <option value="@s" selected="@(Model.StatusFilter == s)">@s</option>
+            }
+        </select>
+        <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+        <a class="btn btn-outline-secondary btn-sm" asp-page="./Index">Reset</a>
+        <a class="btn btn-success btn-sm ms-auto" asp-page="./Create">Create</a>
+    </div>
+</form>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>Reservation</th>
         <th>Trip</th>
         <th>Amount</th>
-        <th>Status</th>
         <th>Date</th>
+        <th>Status</th>
         <th></th>
     </tr>
     </thead>
@@ -22,14 +35,14 @@
     {
         <tr>
             <td>#@p.ReservationId</td>
-            <td>@p.Reservation?.Trip?.Title (@p.Reservation?.Trip?.Destination?.Name)</td>
+            <td>@p.Reservation?.Trip?.Title</td>
             <td>@p.Amount</td>
-            <td>@p.Status</td>
             <td>@p.PaymentDate.ToString("yyyy-MM-dd HH:mm")</td>
-            <td>
-                <a asp-page="Details" asp-route-id="@p.Id">Details</a> |
-                <a asp-page="Edit" asp-route-id="@p.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@p.Id">Delete</a>
+            <td>@p.Status</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary" asp-page="./Details" asp-route-id="@p.Id">Details</a>
+                <a class="btn btn-sm btn-outline-warning" asp-page="./Edit" asp-route-id="@p.Id">Edit</a>
+                <a class="btn btn-sm btn-outline-danger" asp-page="./Delete" asp-route-id="@p.Id">Delete</a>
             </td>
         </tr>
     }

@@ -1,10 +1,138 @@
 ﻿@page
-@model IndexModel
+@model CityBreakBooking.Web.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .hero {
+        border-radius: 18px;
+        padding: 42px;
+        background: linear-gradient(135deg, rgba(13,110,253,.12), rgba(25,135,84,.10));
+        border: 1px solid rgba(0,0,0,.06);
+    }
+    .stat-card {
+        border-radius: 16px;
+        border: 1px solid rgba(0,0,0,.06);
+        box-shadow: 0 6px 20px rgba(0,0,0,.06);
+    }
+    .trip-card {
+        border-radius: 16px;
+        border: 1px solid rgba(0,0,0,.06);
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,.06);
+        height: 100%;
+    }
+    .trip-img {
+        height: 160px;
+        object-fit: cover;
+        width: 100%;
+        background: #f3f4f6;
+    }
+</style>
+
+<div class="hero mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-semibold mb-2">CityBreakBooking</h1>
+            <p class="lead mb-3">
+                Manage destinations, trips, reservations, approvals and payments — fast, clean and secure.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary btn-lg" asp-page="/Trips/Index">Browse Trips</a>
+                <a class="btn btn-outline-secondary btn-lg" asp-page="/Destinations/Index">Destinations</a>
+                <a class="btn btn-outline-success btn-lg" asp-page="/Reservations/Manage/Index">Pending Approvals</a>
+            </div>
+
+            <div class="mt-3 text-muted">
+                <small>
+                    Tip: Mobile app creates reservations via API, then admins/agents confirm them here.
+                </small>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Quick status</h5>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Destinations</span>
+                        <span class="fw-semibold">@Model.DestinationsCount</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Trips</span>
+                        <span class="fw-semibold">@Model.TripsCount</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Reservations</span>
+                        <span class="fw-semibold">@Model.ReservationsCount</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Pending approvals</span>
+                        <span class="fw-semibold text-danger">@Model.PendingApprovalsCount</span>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-grid gap-2">
+                        <a class="btn btn-outline-dark" asp-page="/Reservations/Index">All Reservations</a>
+                        <a class="btn btn-outline-dark" asp-page="/Payments/Index">Payments</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<h3 class="mb-3">Upcoming trips</h3>
+
+@if (Model.UpcomingTrips.Count == 0)
+{
+    <div class="alert alert-info">
+        No upcoming active trips yet. Add one from <a asp-page="/Trips/Create">Trips → Create</a>.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var t in Model.UpcomingTrips)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card trip-card">
+                    @if (!string.IsNullOrWhiteSpace(t.ImageUrl))
+                    {
+                        <img class="trip-img" src="@t.ImageUrl" alt="@t.Title" />
+                    }
+                    else
+                    {
+                        <div class="trip-img d-flex align-items-center justify-content-center text-muted">
+                            <span>No image</span>
+                        </div>
+                    }
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="card-title mb-1">@t.Title</h5>
+                                <div class="text-muted">@t.City</div>
+                            </div>
+                            <span class="badge bg-success fs-6">@t.PricePerPerson €</span>
+                        </div>
+
+                        <div class="mt-3">
+                            <div><strong>Dates:</strong> @t.StartDate.ToString("dd MMM yyyy") – @t.EndDate.ToString("dd MMM yyyy")</div>
+                            <div><strong>Seats:</strong> @t.MaxSeats</div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <a class="btn btn-primary" asp-page="/Trips/Details" asp-route-id="@t.Id">Details</a>
+                            <a class="btn btn-outline-secondary" asp-page="/Reservations/Create" asp-route-tripId="@t.Id">Reserve</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

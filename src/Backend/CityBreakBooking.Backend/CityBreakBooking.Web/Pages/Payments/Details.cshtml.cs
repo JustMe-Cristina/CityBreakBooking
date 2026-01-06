@@ -11,22 +11,16 @@ public class DetailsModel : PageModel
     private readonly AppDbContext _db;
     public DetailsModel(AppDbContext db) => _db = db;
 
-    public Payment Payment { get; private set; } = new();
+    public Payment Payment { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync(int id)
     {
-        if (id is null) return NotFound();
-
-        var payment = await _db.Payments
+        Payment = await _db.Payments
             .Include(p => p.Reservation)
-            .ThenInclude(r => r!.Trip)
-            .ThenInclude(t => t!.Destination)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id.Value);
+            .ThenInclude(r => r.Trip)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-        if (payment is null) return NotFound();
-
-        Payment = payment;
+        if (Payment is null) return NotFound();
         return Page();
     }
 }

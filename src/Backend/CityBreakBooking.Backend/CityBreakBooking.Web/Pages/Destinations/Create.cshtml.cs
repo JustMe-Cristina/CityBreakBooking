@@ -18,11 +18,10 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid) return Page();
-
         _db.Destinations.Add(Destination);
         await _db.SaveChangesAsync();
 
-        return RedirectToPage("Index");
+        TempData["Success"] = "Destination created successfully.";
+        return RedirectToPage("./Index");
     }
 }

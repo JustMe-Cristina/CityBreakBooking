@@ -1,6 +1,5 @@
 @page
 @model CityBreakBooking.Web.Pages.Reservations.Manage.IndexModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Pending Reservations</h1>
 
@@ -25,7 +24,7 @@ else
             <th>Trip</th>
             <th>Destination</th>
             <th>Persons</th>
-            <th>UserId</th>
+            <th>UserEmail</th>
             <th>Created</th>
             <th></th>
         </tr>
@@ -37,7 +36,7 @@ else
                 <td>@r.Trip?.Title</td>
                 <td>@r.Trip?.Destination?.Name</td>
                 <td>@r.NumberOfPersons</td>
-                <td>@r.UserId</td>
+                <td>@r.UserEmail</td>
                 <td>@r.ReservationDate.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>
                     <form method="post" style="display:inline">

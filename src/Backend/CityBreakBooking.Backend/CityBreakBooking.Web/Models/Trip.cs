@@ -4,6 +4,7 @@ namespace CityBreakBooking.Web.Models;
 
 public class Trip
 {
+    [Key]
     public int Id { get; set; }
 
     [Required]
@@ -13,10 +14,10 @@ public class Trip
     [Required, MaxLength(150)]
     public string Title { get; set; } = string.Empty;
 
-    [Required]
+    [Required, DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
-    [Required]
+    [Required, DataType(DataType.Date)]
     public DateTime EndDate { get; set; }
 
     [Range(0, 10000)]
@@ -26,8 +27,11 @@ public class Trip
     public int MaxSeats { get; set; }
 
     public bool IsActive { get; set; } = true;
-    
-    //colecția de rezervări în Trip (navigation property) și te asiguri că Reservation are TripId + Trip.
-    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 
+    // Optional - pentru mobil (afișezi poza în MAUI)
+    [MaxLength(500)]
+    public string? ImageUrl { get; set; }
+
+    // Relationship: 1 Trip -> many Reservations
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

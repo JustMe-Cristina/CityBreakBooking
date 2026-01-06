@@ -1,35 +1,79 @@
 @page
 @model CityBreakBooking.Web.Pages.Destinations.IndexModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
 
 <h1>Destinations</h1>
 
-<p>
-    <a asp-page="Create">Create new</a>
-</p>
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-sm-6 col-md-5">
+        <label class="form-label">Search</label>
+        <input class="form-control" name="Search" value="@Model.Search" placeholder="Name or country..." />
+    </div>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Active</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var d in Model.Destinations)
-    {
+    <div class="col-sm-6 col-md-3">
+        <label class="form-label">Status</label>
+        <select class="form-select" name="IsActive">
+            <option value="" selected="@(Model.IsActive is null)">All</option>
+            <option value="true" selected="@(Model.IsActive == true)">Active</option>
+            <option value="false" selected="@(Model.IsActive == false)">Inactive</option>
+        </select>
+    </div>
+
+    <div class="col-md-4 d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Apply</button>
+        <a class="btn btn-outline-secondary" asp-page="./Index">Reset</a>
+        <a class="btn btn-success ms-auto" asp-page="./Create">Create</a>
+    </div>
+</form>
+
+@if (Model.Destinations is null || !Model.Destinations.Any())
+{
+    <div class="alert alert-info">No destinations found.</div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
         <tr>
-            <td>@d.Name</td>
-            <td>@d.Country</td>
-            <td>@d.IsActive</td>
-            <td>
-                <a asp-page="Details" asp-route-id="@d.Id">Details</a> |
-                <a asp-page="Edit" asp-route-id="@d.Id">Edit</a> |
-                <a asp-page="Delete" asp-route-id="@d.Id">Delete</a>
-            </td>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th style="width: 260px;"></th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var d in Model.Destinations)
+        {
+            <tr>
+                <td>@d.Name</td>
+                <td>@d.Country</td>
+                <td>@(string.IsNullOrWhiteSpace(d.Description) ? "-" : d.Description)</td>
+                <td>
+                    <span class="badge @(d.IsActive ? "bg-success" : "bg-secondary")">
+                        @(d.IsActive ? "ACTIVE" : "INACTIVE")
+                    </span>
+                </td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-primary"
+                       asp-page="./Details" asp-route-id="@d.Id"
+                       asp-route-Search="@Model.Search" asp-route-IsActive="@Model.IsActive">
+                        Details
+                    </a>
+
+                    <a class="btn btn-sm btn-primary"
+                       asp-page="./Edit" asp-route-id="@d.Id"
+                       asp-route-Search="@Model.Search" asp-route-IsActive="@Model.IsActive">
+                        Edit
+                    </a>
+
+                    <a class="btn btn-sm btn-danger"
+                       asp-page="./Delete" asp-route-id="@d.Id"
+                       asp-route-Search="@Model.Search" asp-route-IsActive="@Model.IsActive">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

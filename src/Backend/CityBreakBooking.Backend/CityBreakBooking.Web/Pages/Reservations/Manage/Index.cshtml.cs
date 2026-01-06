@@ -1,12 +1,14 @@
 using CityBreakBooking.Web.Data;
 using CityBreakBooking.Web.Models;
 using CityBreakBooking.Web.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityBreakBooking.Web.Pages.Reservations.Manage;
 
+[Authorize(Roles = "Admin,TravelAgent")]
 public class IndexModel : PageModel
 {
     private readonly AppDbContext _db;
@@ -40,7 +42,7 @@ public class IndexModel : PageModel
 
         if (reservation.NumberOfPersons > available)
         {
-            TempData["Error"] = "Cannot confirm. Not enough available seats. Remaining: " + available + ".";
+            TempData["Error"] = $"Cannot confirm. Not enough seats. Remaining: {available}.";
             return RedirectToPage();
         }
 

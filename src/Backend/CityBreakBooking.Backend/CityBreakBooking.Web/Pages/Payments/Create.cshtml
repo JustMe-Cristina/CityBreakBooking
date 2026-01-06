@@ -1,13 +1,24 @@
 @page
 @model CityBreakBooking.Web.Pages.Payments.CreateModel
-@attribute [Microsoft.AspNetCore.Authorization.Authorize(Roles = "Admin,TravelAgent")]
+@{
+    ViewData["Title"] = "Create Payment";
+}
 
 <h1>Create Payment</h1>
 
+@if (TempData["Success"] is not null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
 <form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
     <div class="mb-3">
         <label asp-for="Payment.ReservationId" class="form-label">Reservation</label>
-        <select asp-for="Payment.ReservationId" class="form-select" asp-items="Model.ReservationOptions"></select>
+        <select asp-for="Payment.ReservationId" class="form-select" asp-items="Model.ReservationOptions">
+            <option value="">-- select reservation --</option>
+        </select>
         <span asp-validation-for="Payment.ReservationId" class="text-danger"></span>
     </div>
 
@@ -18,13 +29,23 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="Payment.PaymentDate" class="form-label"></label>
+        <input asp-for="Payment.PaymentDate" class="form-control" />
+        <span asp-validation-for="Payment.PaymentDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="Payment.Status" class="form-label"></label>
-        <select asp-for="Payment.Status" class="form-select" asp-items="Model.StatusOptions"></select>
+        <select asp-for="Payment.Status" class="form-select"
+                asp-items="Html.GetEnumSelectList<CityBreakBooking.Web.Models.Enums.PaymentStatus>()">
+        </select>
         <span asp-validation-for="Payment.Status" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
 </form>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

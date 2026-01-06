@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using CityBreakBooking.Web.Models.Enums;
 
 namespace CityBreakBooking.Web.Models;
 
@@ -7,15 +6,16 @@ public class Payment
 {
     public int Id { get; set; }
 
-    [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "Please select a reservation.")]
     public int ReservationId { get; set; }
+
+    // IMPORTANT: navigation NU trebuie Required la form binding
     public Reservation? Reservation { get; set; }
 
-    [Range(0, 100000)]
+    [Range(0.01, 100000, ErrorMessage = "Amount must be greater than 0.")]
     public decimal Amount { get; set; }
 
     public DateTime PaymentDate { get; set; } = DateTime.Now;
 
-    [Required]
-    public PaymentStatus Status { get; set; } = PaymentStatus.Paid;
+    public Enums.PaymentStatus Status { get; set; } = Enums.PaymentStatus.Pending;
 }
