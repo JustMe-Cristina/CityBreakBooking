@@ -48,7 +48,14 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// seed roles + admin
+// 1) migrate DB first (creates AspNet tables etc.)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
+
+// 2) then seed roles + admin (now tables exist)
 await IdentitySeed.SeedAsync(app.Services);
 
 app.MapRazorPages();
